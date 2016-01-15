@@ -1,0 +1,56 @@
+#editor {
+  display: none;
+  margin-top: 35px;
+  height: 100%;
+  overflow: auto;
+}
+
+#preview {
+  height: calc(100% - 40px);
+  width: calc(50% - 40px);
+  float: left;
+  overflow-y: scroll;
+  padding: 20px;
+}
+
+#editor div.CodeMirror {
+  height: 100%;
+  width: 50%;
+  float: left;
+}
+
+#edit {
+  display: inline-block;
+}
+
+.edit {
+  display: none;
+}
+
+#right_controles {
+  float: right;
+}
+
+#right_controles input {
+  padding: 10px;
+  border: 0;
+}
+
+#right_controles ul#matches {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  list-style-type: none;
+  padding-left: 0;
+  width: 170px;
+}
+
+#right_controles ul#matches li {
+  background-color: #FFF;
+  padding-left: 10px;
+}
+
+#right_controles ul#matches li a {
+  text-decoration: none;
+  color: #333;
+}

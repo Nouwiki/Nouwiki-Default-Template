@@ -1,0 +1,44 @@
+{
+  "name": "nouwiki-default-template",
+  "version": "0.0.1",
+  "description": "Default Template for Nouwiki",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/01AutoMonkey/nouwiki"
+  },
+  "keywords": [
+    "git",
+    "wiki",
+    "flexible",
+    "federated",
+    "markup",
+    "template"
+  ],
+  "author": "Brynjar Harðarson",
+  "license": "GPLv2",
+  "bugs": {
+    "url": "https://github.com/01AutoMonkey/nouwiki_default_template/issues"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "babel-core": "^6.2.1",
+    "babel-loader": "^6.2.0",
+    "codemirror": "^5.9.0",
+    "css-loader": "^0.23.0",
+    "dot": "^1.0.3",
+    "extract-text-webpack-plugin": "^0.9.1",
+    "file-loader": "^0.8.5",
+    "jquery": "^2.1.4",
+    "json-loader": "^0.5.4",
+    "less": "^2.5.3",
+    "less-loader": "^2.2.2",
+    "node-sass": "^3.4.2",
+    "sass-loader": "^3.1.2",
+    "style-loader": "^0.13.0",
+    "toml": "^2.3.0",
+    "webpack": "^1.12.9"
+  }
+}

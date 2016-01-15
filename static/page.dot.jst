@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+	<title>{{=it.wiki}}: {{=it.title}}</title>
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" href="templates/current/static/assets/css/normalize.css">
+	<link rel="stylesheet" href="templates/current/static/assets/css/style.css">
+	<link rel="stylesheet" href="templates/current/static/assets/css/content.css">
+
+	<!-- Global User CSS -->
+	{{ for(var i in it.global_css) { }}
+	<link rel="stylesheet" href="{{=it.global_css[i]}}">
+	{{ } }}
+
+	<!-- Local User CSS -->
+	{{ for(var i in it.local_css) { }}
+	<link rel="stylesheet" href="{{=it.local_css[i]}}">
+	{{ } }}
+</head>
+<body>
+	<div id="controles">
+    <a href="/"><button id="home">Home</button></a>
+  </div>
+	<div id="content" class="markdown-body">
+	{{=it.html}}
+	</div>
+
+	<!-- Global User JS -->
+	{{ for(var i in it.global_js) { }}
+	<script src="{{=it.global_js[i]}}"></script>
+	{{ } }}
+
+	<!-- Local User JS -->
+	{{ for(var i in it.local_js) { }}
+	<script src="{{=it.local_js[i]}}"></script>
+	{{ } }}
+</body>
+</html>
