@@ -13,7 +13,6 @@
 
   <!-- Dynamic -->
   <link rel="stylesheet" href="templates/nouwiki_ui.css">
-  <link rel="stylesheet" href="templates/current/dynamic/assets/css/prose-bright.css">
   <link rel="stylesheet" href="templates/current/dynamic/assets/css/ui.css">
 
   <!-- Global User Import -->
@@ -35,6 +34,7 @@
   {{ for(var i in it.local_css) { }}
   <link rel="stylesheet" href="{{=it.local_css[i]}}">
   {{ } }}
+
   <script>
     var wiki = "{{=it.wiki}}";
   </script>
