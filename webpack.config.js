@@ -3,9 +3,9 @@ module.exports = {
   node: {
     fs: "empty"
   },
-  entry: './dynamic/assets/src/index.js',
+  entry: './src/index.js',
   output: {
-    filename: './dynamic/assets/js/ui.js'
+    filename: './template/dynamic/assets/js/ui.js'
   },
   module: {
     //noParse: [/autoit.js/],
@@ -19,6 +19,6 @@ module.exports = {
     ]
   },
   plugins: [
-      new ExtractTextPlugin("./dynamic/assets/css/ui.css")
+      new ExtractTextPlugin("./template/dynamic/assets/css/ui.css")
   ]
 };
