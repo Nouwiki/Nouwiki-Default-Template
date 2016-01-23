@@ -16,6 +16,16 @@
   <link rel="stylesheet" href="templates/current/dynamic/assets/css/prose-bright.css">
   <link rel="stylesheet" href="templates/current/dynamic/assets/css/ui.css">
 
+  <!-- Global User Import -->
+  {{ for(var i in it.global_import) { }}
+  <link rel="import" href="{{=it.global_import[i]}}">
+  {{ } }}
+
+  <!-- Local User Import -->
+  {{ for(var i in it.local_import) { }}
+  <link rel="import" href="{{=it.local_import[i]}}">
+  {{ } }}
+
   <!-- Global User CSS -->
   {{ for(var i in it.global_css) { }}
   <link rel="stylesheet" href="{{=it.global_css[i]}}">
