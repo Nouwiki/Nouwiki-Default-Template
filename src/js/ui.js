@@ -159,14 +159,14 @@ function create() {
   });
 }
 
-$("#delete").click(function() {
+$("#remove").click(function() {
   remove();
 });
 function remove() {
-  var result = confirm("Are you sure you want to delete this page?");
+  var result = confirm("Are you sure you want to remove this page?");
   if (result) {
     $.ajax({
-        url: '/api/delete',
+        url: '/api/remove',
         type: 'POST',
         data: origin.page,
         contentType: "text/plain",
@@ -177,11 +177,11 @@ function remove() {
   }
 }
 
-$("#grep_pages").keyup(function() {
+$("#search_pages").keyup(function() {
   var val = $(this).val();
   if (val != "" && val != undefined && val != null) {
     $.ajax({
-        url: '/api/grep_pages',
+        url: '/api/search_pages',
         type: 'POST',
         data: val,
         contentType: "text/plain",
