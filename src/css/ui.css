@@ -43,6 +43,7 @@
   list-style-type: none;
   padding-left: 0;
   width: 170px;
+  z-index: 1;
 }
 
 #right_controles ul#matches li {

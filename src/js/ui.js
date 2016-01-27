@@ -205,5 +205,7 @@ $("#search_pages").keyup(function() {
           $("#matches").html(lis);
         }
     });
+  } else {
+    $("#matches").html("");
   }
 });
