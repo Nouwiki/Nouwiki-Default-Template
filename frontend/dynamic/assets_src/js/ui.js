@@ -31,8 +31,7 @@ window.onbeforeunload = confirmOnPageExit;
 //window.onbeforeunload = null;
 
 var config;
-var template_markup;
-var ready = 2;
+var ready = 1;
 $.get( "config.toml", function( c ) {
   config = toml.parse(c);
   ready -= 1;
@@ -40,15 +39,6 @@ $.get( "config.toml", function( c ) {
     $("#controles").removeClass("disabled");
   }
 });
-$.get( "templates/current/dynamic/page.dot.jst", function( t ) {
-  template_markup = t;
-  ready -= 1;
-  if (ready == 0) {
-    $("#controles").removeClass("disabled");
-  }
-});
-
-// parse.parse(markup).html
 
 var myCodeMirror = CodeMirror.fromTextArea($("#editor textarea")[0], {
   lineWrapping: true,
@@ -130,8 +120,6 @@ function save() {
         document.location.reload(true);
       }
   });
-  /*document.write(parse.parse(markup, config, template_markup));
-  document.close();*/
 }
 
 $("#create").click(function() {
@@ -145,16 +133,6 @@ function create() {
       contentType: "text/plain",
       success: function(result) {
         document.location.reload(true);
-        /*$.ajax({
-            url: '/api/get_page',
-            type: 'POST',
-            data: origin.page,
-            contentType: "text/plain",
-            success: function(html) {
-              document.write(html);
-              document.close();
-            }
-        });*/
       }
   });
 }

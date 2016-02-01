@@ -7,13 +7,10 @@
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-  <link rel="stylesheet" href="templates/current/static/assets/css/normalize.css">
-  <link rel="stylesheet" href="templates/current/static/assets/css/style.css">
-  <link rel="stylesheet" href="templates/current/static/assets/css/content.css">
 
   <!-- Dynamic -->
-  <link rel="stylesheet" href="templates/nouwiki_ui.css">
-  <link rel="stylesheet" href="templates/current/dynamic/assets/css/ui.css">
+  <link rel="stylesheet" href="css/nouwiki.ui.css">
+  <link rel="stylesheet" href="css/template.ui.css">
 
   <!-- Global User Import -->
   {{ for(var i in it.global.import) { }}
@@ -61,9 +58,8 @@
   </div>
 
   <!-- Dynamic -->
-  <script src="templates/nouwiki_ui.js"></script>
-  <script src="templates/current/dynamic/assets/js/ui.js"></script>
-
+  <script src="js/nouwiki.ui.js"></script>
+  <script src="js/template.ui.js"></script>
 
   <!-- Global User JS -->
   {{ for(var i in it.global.js) { }}

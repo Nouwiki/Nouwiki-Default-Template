@@ -7,32 +7,29 @@
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-  <link rel="stylesheet" href="templates/current/static/assets/css/normalize.css">
-  <link rel="stylesheet" href="templates/current/static/assets/css/style.css">
-  <link rel="stylesheet" href="templates/current/static/assets/css/content.css">
 
   <!-- Dynamic -->
-  <link rel="stylesheet" href="templates/nouwiki_ui.css">
-  <link rel="stylesheet" href="templates/current/dynamic/assets/css/ui.css">
+  <link rel="stylesheet" href="css/nouwiki.ui.css">
+  <link rel="stylesheet" href="css/template.ui.css">
 
   <!-- Global User Import -->
   {{ for(var i in it.global.import) { }}
-  <link rel="import" href="{{=it.global_import[i]}}">
+  <link rel="import" href="{{=it.global.import[i]}}">
   {{ } }}
 
   <!-- Local User Import -->
   {{ for(var i in it.local.import) { }}
-  <link rel="import" href="{{=it.local_import[i]}}">
+  <link rel="import" href="{{=it.local.import[i]}}">
   {{ } }}
 
   <!-- Global User CSS -->
   {{ for(var i in it.global.css) { }}
-  <link rel="stylesheet" href="{{=it.global_css[i]}}">
+  <link rel="stylesheet" href="{{=it.global.css[i]}}">
   {{ } }}
 
   <!-- Local User CSS -->
   {{ for(var i in it.local.css) { }}
-  <link rel="stylesheet" href="{{=it.local_css[i]}}">
+  <link rel="stylesheet" href="{{=it.local.css[i]}}">
   {{ } }}
 
   <script>
@@ -57,17 +54,17 @@
   </div>
 
   <!-- Dynamic -->
-  <script src="templates/nouwiki_ui.js"></script>
-  <script src="templates/current/dynamic/assets/js/ui.js"></script>
+  <script src="js/nouwiki.ui.js"></script>
+  <script src="js/template.ui.js"></script>
 
   <!-- Global User JS -->
   {{ for(var i in it.global.js) { }}
-  <script src="{{=it.global_js[i]}}"></script>
+  <script src="{{=it.global.js[i]}}"></script>
   {{ } }}
 
   <!-- Local User JS -->
   {{ for(var i in it.local.js) { }}
-  <script src="{{=it.local_js[i]}}"></script>
+  <script src="{{=it.local.js[i]}}"></script>
   {{ } }}
 </body>
 </html>

@@ -3,9 +3,25 @@ module.exports = {
   node: {
     fs: "empty"
   },
-  entry: './src/index.js',
+  entry: {
+    "static": [
+      './frontend/static/assets_src/css/style.css',
+      './frontend/static/assets_src/css/content.css',
+      './frontend/static/assets_src/css/normalize.css',
+    ],
+    "dynamic": [
+      './frontend/dynamic/assets_src/js/ui.js',
+
+      './frontend/static/assets_src/css/style.css',
+      './frontend/static/assets_src/css/content.css',
+      './frontend/static/assets_src/css/normalize.css',
+
+      './frontend/dynamic/assets_src/css/prose-bright.css',
+      './frontend/dynamic/assets_src/css/ui.css',
+    ],
+  },
   output: {
-    filename: './dynamic/assets/js/ui.js'
+    filename: "./frontend/[name]/assets/js/template.ui.js"
   },
   module: {
     //noParse: [/autoit.js/],
@@ -19,6 +35,6 @@ module.exports = {
     ]
   },
   plugins: [
-      new ExtractTextPlugin("./dynamic/assets/css/ui.css")
+      new ExtractTextPlugin("./frontend/[name]/assets/css/template.ui.css")
   ]
 };
