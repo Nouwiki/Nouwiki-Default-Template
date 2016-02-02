@@ -45,10 +45,10 @@ var myCodeMirror = CodeMirror.fromTextArea($("#editor textarea")[0], {
   theme: 'prose-bright',
   mode: "markdown"
 });
-var html;
+var fragment;
 myCodeMirror.on("change", function(cm, change) {
-  html = parse.parse(origin.page, myCodeMirror.getValue(), config);
-  $("#preview").html(html);
+  fragment = parse.parse(origin.page, myCodeMirror.getValue(), config).fragment;
+  $("#preview").html(fragment);
 });
 
 function getMarkupText() {
