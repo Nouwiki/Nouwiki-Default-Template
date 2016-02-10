@@ -1,40 +1,43 @@
+// need to add a post-css loader (css prefixer)
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
   node: {
     fs: "empty"
   },
   entry: {
+    "filesystem": [
+      './assets_src/static/css/normalize.css',
+      './assets_src/static/css/github-markdown.css',
+      './assets_src/static/css/style.css'
+    ],
     "static": [
-      './frontend/static/assets_src/css/style.css',
-      './frontend/static/assets_src/css/content.css',
-      './frontend/static/assets_src/css/normalize.css',
+      './assets_src/static/css/normalize.css',
+      './assets_src/static/css/github-markdown.css',
+      './assets_src/static/css/style.css'
     ],
     "dynamic": [
-      './frontend/dynamic/assets_src/js/ui.js',
+      './assets_src/static/css/normalize.css',
+      './assets_src/static/css/github-markdown.css',
+      './assets_src/static/css/style.css',
 
-      './frontend/static/assets_src/css/style.css',
-      './frontend/static/assets_src/css/content.css',
-      './frontend/static/assets_src/css/normalize.css',
-
-      './frontend/dynamic/assets_src/css/prose-bright.css',
-      './frontend/dynamic/assets_src/css/ui.css',
+      './assets_src/dynamic/js/ui.js',
+      './assets_src/dynamic/css/prose-bright.css',
+      './assets_src/dynamic/css/ui.css'
     ],
   },
   output: {
-    filename: "./frontend/[name]/assets/js/template.ui.js"
+    filename: "./assets/[name]/js/template.ui.js"
   },
   module: {
-    //noParse: [/autoit.js/],
     loaders: [
       { test: /\.js$/, loader: 'babel-loader' },
       { test: /\.scss$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader?sourceMap") },
-      { test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader') }, // use ! to chain loaders
+      { test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader') },
       { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader') },
-      { test: /\.(png|jpg)$/, loapackder: 'url-loader?limit=8192' }, // inline base64 URLs for <=8k images, direct URLs for the rest
       { test: /\.json$/, loader: "json" }
     ]
   },
   plugins: [
-      new ExtractTextPlugin("./frontend/[name]/assets/css/template.ui.css")
+      new ExtractTextPlugin("./assets/[name]/css/template.ui.css")
   ]
 };

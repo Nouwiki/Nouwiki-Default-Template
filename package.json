@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/01AutoMonkey/nouwiki"
+    "url": "https://github.com/Nouwiki/nouwiki-default-template"
   },
   "keywords": [
     "git",
@@ -18,29 +18,27 @@
     "template"
   ],
   "author": "Brynjar Harðarson",
-  "license": "GPLv2",
+  "license": "GPL-2.0",
   "bugs": {
-    "url": "https://github.com/01AutoMonkey/nouwiki_default_template/issues"
+    "url": "https://github.com/Nouwiki/nouwiki-default-template/issues"
   },
   "devDependencies": {
-    "babel-core": "^6.2.1",
-    "babel-loader": "^6.2.0",
-    "codemirror": "^5.9.0",
-    "css-loader": "^0.23.0",
+    "babel-core": "^6.5.1",
+    "babel-loader": "^6.2.2",
+    "codemirror": "^5.11.0",
+    "css-loader": "^0.23.1",
     "dot": "^1.0.3",
-    "extract-text-webpack-plugin": "^0.9.1",
+    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
-    "jquery": "^2.1.4",
+    "jquery": "^2.2.0",
     "json-loader": "^0.5.4",
-    "less": "^2.5.3",
+    "less": "^2.6.0",
     "less-loader": "^2.2.2",
     "node-sass": "^3.4.2",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
     "toml": "^2.3.0",
-    "webpack": "^1.12.9"
+    "webpack": "^1.12.13"
   },
-  "dependencies": {
-
-  }
+  "dependencies": {}
 }

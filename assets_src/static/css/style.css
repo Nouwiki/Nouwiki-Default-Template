@@ -1,0 +1,53 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: calc(100% - 57px);
+  margin: 0px;
+  padding: 0px;
+  max-width: 100%;
+  line-height: 1.6;
+  color: #333;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+#content.markdown-body, #preview.markdown-body {
+
+}
+
+#content {
+  margin: 20px;
+  margin-top: 57px;
+}
+
+#controles {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-bottom: 0px solid #333;
+  background-color: #FCFCFC;
+  width: 100%;
+}
+
+#controles a button {
+  color: #333;
+}
+
+#controles.disabled button {
+  opacity: 0.7;
+  color: #999;
+}
+
+#controles.disabled button#home {
+  opacity: 1.0;
+  color: #333;
+}
+
+#controles button {
+  float: left;
+  background-color: #FCFCFC;
+  border: 0px;
+  border-right: 2px solid #FFF;
+  padding: 10px;
+}
