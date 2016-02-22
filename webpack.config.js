@@ -8,16 +8,19 @@ module.exports = {
     "filesystem": [
       './assets_src/static/css/normalize.css',
       './assets_src/static/css/github-markdown.css',
+      './assets_src/static/css/medium-font.css',
       './assets_src/static/css/style.css'
     ],
     "static": [
       './assets_src/static/css/normalize.css',
       './assets_src/static/css/github-markdown.css',
+      './assets_src/static/css/medium-font.css',
       './assets_src/static/css/style.css'
     ],
     "dynamic": [
       './assets_src/static/css/normalize.css',
       './assets_src/static/css/github-markdown.css',
+      './assets_src/static/css/medium-font.css',
       './assets_src/static/css/style.css',
 
       './assets_src/dynamic/js/ui.js',

@@ -3,21 +3,23 @@ html {
 }
 
 body {
-  height: calc(100% - 57px);
+  height: calc(100% - 45px);
   margin: 0px;
   padding: 0px;
   max-width: 100%;
   line-height: 1.6;
-  color: #333;
-  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  color: #2c3e50;
+  font-family: medium-content-sans-serif-font, "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 #content.markdown-body, #preview.markdown-body {
-
+  color: #2c3e50;
+  font-size: 1.25em;
+  font-family: medium-content-sans-serif-font, "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 #content {
-  margin: 20px;
+  margin: 30px;
   margin-top: 57px;
 }
 
@@ -26,7 +28,7 @@ body {
   left: 0;
   top: 0;
   border-bottom: 0px solid #333;
-  background-color: #FCFCFC;
+  /*background-color: #FCFCFC;*/
   width: 100%;
 }
 

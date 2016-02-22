@@ -4,6 +4,8 @@ var CodeMirror = require("codemirror");
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
+require('codemirror/addon/scroll/simplescrollbars.css');
+require('codemirror/addon/scroll/simplescrollbars.js');
 
 var markupText = "";
 var confirmOnPageExit = function (e)
@@ -43,7 +45,8 @@ function start() {
 var myCodeMirror = CodeMirror.fromTextArea($("#editor textarea")[0], {
   lineWrapping: true,
   theme: 'prose-bright',
-  mode: "markdown"
+  mode: "markdown",
+  scrollbarStyle: "overlay"
 });
 var fragment;
 var first = true;
