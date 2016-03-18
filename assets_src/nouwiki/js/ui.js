@@ -56,7 +56,7 @@ myCodeMirror.on("change", function(cm, change) {
   } else {
     window.nouwiki.plugins = [];
   }
-  fragment = window.nouwiki.parse(window.nouwiki.origin.page, myCodeMirror.getValue(), window.nouwiki.config, undefined, window.nouwiki.plugins, false).fragment;
+  fragment = window.nouwiki.parse.parse(window.nouwiki.origin.page, myCodeMirror.getValue(), window.nouwiki.config, undefined).fragment;
   $("#preview").html(fragment);
 });
 

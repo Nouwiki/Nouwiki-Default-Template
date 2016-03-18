@@ -5,28 +5,28 @@ module.exports = {
     fs: "empty"
   },
   entry: {
-    "filesystem": [
-      './assets_src/static/css/normalize.css',
-      './assets_src/static/css/github-markdown.css',
-      './assets_src/static/css/medium-font.css',
-      './assets_src/static/css/style.css'
-    ],
     "static": [
       './assets_src/static/css/normalize.css',
       './assets_src/static/css/github-markdown.css',
       './assets_src/static/css/medium-font.css',
       './assets_src/static/css/style.css'
     ],
-    "dynamic": [
+    "dynamic_read": [
+      './assets_src/static/css/normalize.css',
+      './assets_src/static/css/github-markdown.css',
+      './assets_src/static/css/medium-font.css',
+      './assets_src/static/css/style.css'
+    ],
+    "nouwiki": [
       './assets_src/static/css/normalize.css',
       './assets_src/static/css/github-markdown.css',
       './assets_src/static/css/medium-font.css',
       './assets_src/static/css/style.css',
 
-      './assets_src/dynamic/js/ui.js',
-      './assets_src/dynamic/css/prose-bright.css',
-      './assets_src/dynamic/css/ui.css'
-    ],
+      './assets_src/nouwiki/js/ui.js',
+      './assets_src/nouwiki/css/prose-bright.css',
+      './assets_src/nouwiki/css/ui.css'
+    ]
   },
   output: {
     filename: "./assets/[name]/js/template.ui.js"

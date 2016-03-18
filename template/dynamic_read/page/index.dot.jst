@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>{{=it.wiki}}</title>
+  <link rel="stylesheet" href="nouwiki/templates/nouwiki-default-template/assets/static/css/template.ui.css">
+  <script>
+    window.target = "dynamic_read";
+  </script>
+  <script src="nouwiki/assets/js/require.js"></script>
+  <script src="nouwiki/assets/js/nouwiki.init.js"></script>
+  <script>
+    if (window.nouwiki.ready == true) {
+      start();
+    } else {
+      window.nouwiki.ready = start;
+    }
+    function start() {
+      window.nouwiki.ready = true;
+      var page = window.nouwiki.parse.parse(window.nouwiki.title, window.nouwiki.markup, window.nouwiki.config, window.nouwiki.template).page;
+      document.open("text/html", "replace")
+      document.write(page);
+      document.close();
+    }
+  </script>
+</head>
+<body>
+
+</body>
+</html>

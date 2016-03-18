@@ -3,13 +3,13 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-	<title>{{=it.global.wiki}}: {{=it.title}}</title>
+	<title>{{=it.wiki}}: {{=it.title}}</title>
 	<!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 
 	<!-- Static -->
-	<link rel="stylesheet" href="../../templates/nouwiki-default-template/assets/static/css/template.ui.css">
+	<link rel="stylesheet" href="nouwiki/templates/nouwiki-default-template/assets/static/css/template.ui.css">
 
 	<!-- Global User Import -->
   {{ for(var i in it.global.import) { }}
@@ -33,14 +33,14 @@
 </head>
 <body>
 	<div id="controles">
-    <a href="../../index.html"><button id="home">Home</button></a>
+    <a href="./"><button id="home">Home</button></a>
   </div>
 	<div id="content" class="markdown-body">
 	{{=it.fragment}}
 	</div>
 
 	<!-- Static -->
-  <script src="../../templates/nouwiki-default-template/assets/static/js/template.ui.js"></script>
+  <script src="nouwiki/templates/nouwiki-default-template/assets/static/js/template.ui.js"></script>
 
 	<!-- Global User JS -->
 	{{ for(var i in it.global.js) { }}
