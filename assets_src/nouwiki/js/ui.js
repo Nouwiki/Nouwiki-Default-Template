@@ -176,7 +176,7 @@ $("#search_pages").keyup(function() {
             var m = matches[p].substring(i, ie);
             var e = matches[p].substring(ie);
             var bold = s+"<b>"+m+"</b>"+e;
-            lis += "<li><a href='/"+matches[p]+"'>"+bold+"</a></li>";
+            lis += "<li><a href='/wiki/"+matches[p]+"'>"+bold+"</a></li>";
           }
           $("#matches").html(lis);
         }

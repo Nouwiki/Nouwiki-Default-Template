@@ -52,11 +52,11 @@
 
 #right_controles ul#matches {
   position: absolute;
-  top: 20px;
+  top: 47px;
   right: 0;
   list-style-type: none;
   padding-left: 0;
-  width: 170px;
+  width: 206px;
   z-index: 1;
 }
 

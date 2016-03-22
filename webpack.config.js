@@ -11,7 +11,7 @@ module.exports = {
       './assets_src/static/css/medium-font.css',
       './assets_src/static/css/style.css'
     ],
-    "dynamic_read": [
+    "dynamic": [
       './assets_src/static/css/normalize.css',
       './assets_src/static/css/github-markdown.css',
       './assets_src/static/css/medium-font.css',

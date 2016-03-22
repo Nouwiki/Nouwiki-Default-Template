@@ -9,7 +9,7 @@
 	<![endif]-->
 
 	<!-- Static -->
-	<link rel="stylesheet" href="../../nouwiki/templates/nouwiki-default-template/assets/static/css/template.ui.css">
+	<link rel="stylesheet" href="../nouwiki/templates/nouwiki-default-template/assets/static/css/template.ui.css">
 
 	<!-- Global User Import -->
   {{ for(var i in it.global.import) { }}
@@ -33,14 +33,14 @@
 </head>
 <body>
 	<div id="controles">
-    <a href="../../"><button id="home">Home</button></a>
+    <a href="../static.html"><button id="home">Home</button></a>
   </div>
 	<div id="content" class="markdown-body">
 	{{=it.fragment}}
 	</div>
 
 	<!-- Static -->
-  <script src="../../nouwiki/templates/nouwiki-default-template/assets/static/js/template.ui.js"></script>
+  <script src="../nouwiki/templates/nouwiki-default-template/assets/static/js/template.ui.js"></script>
 
 	<!-- Global User JS -->
 	{{ for(var i in it.global.js) { }}
