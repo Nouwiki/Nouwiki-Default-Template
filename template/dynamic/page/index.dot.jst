@@ -4,22 +4,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>{{=it.wiki}}</title>
-  <link rel="stylesheet" href="nouwiki/templates/nouwiki-default-template/assets/static/css/template.ui.css">
+  <link rel="stylesheet" href="components/templates/nouwiki-default-template/assets/static/css/template.ui.css">
   <script>
-    window.target = "dynamic";
+    var nouwiki_global = {};
+    nouwiki_global.target = "dynamic";
   </script>
-  <script src="nouwiki/assets/js/require.js"></script>
-  <script src="nouwiki/assets/js/nouwiki.init.js"></script>
+  <script src="components/nouwiki/js/require.js"></script>
+  <script src="components/nouwiki/js/nouwiki.parser.js"></script>
+  <script src="components/nouwiki/js/nouwiki.init.js"></script>
   <script>
-    if (window.nouwiki.ready == true) {
+    console.log("Here", nouwiki_global.nouwiki.ready)
+    if (nouwiki_global.nouwiki.ready == true)
+    {
       start();
     } else {
-      window.nouwiki.ready = start;
+      nouwiki_global.nouwiki.ready = start;
     }
     function start() {
-      window.nouwiki.ready = true;
-      var page = window.nouwiki.parse.parse(window.nouwiki.title, window.nouwiki.markup, window.nouwiki.config, window.nouwiki.template).page;
-      document.open("text/html", "replace")
+      nouwiki_global.nouwiki.ready = true;
+      var page = nouwiki_global.parser.parse(nouwiki_global.nouwiki.title, nouwiki_global.nouwiki.nouwiki.wiki_name, nouwiki_global.nouwiki.markup, nouwiki_global.nouwiki.template, nouwiki_global.nouwiki.global).page;
+      document.open("text/html", "replace");
       document.write(page);
       document.close();
     }

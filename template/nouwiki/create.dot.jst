@@ -9,9 +9,10 @@
   <![endif]-->
 
   <!-- Dynamic -->
-  <link rel="stylesheet" href="/nouwiki/templates/nouwiki-default-template/assets/nouwiki/css/template.ui.css">
+  <link rel="stylesheet" href="/components/templates/nouwiki-default-template/assets/nouwiki/css/template.ui.css">
   <script>
-    window.target = "nouwiki";
+    var nouwiki_global = {};
+    nouwiki_global.target = "nouwiki";
   </script>
 
   <!-- Global User Import -->
@@ -34,8 +35,9 @@
   <link rel="stylesheet" href="{{=it.local.css[i]}}">
   {{ } }}
 
-  <script src="/nouwiki/assets/js/require.js"></script>
-  <script src="/nouwiki/assets/js/nouwiki.init.js"></script>
+  <script src="/components/nouwiki/js/require.js"></script>
+  <script src="/components/nouwiki/js/nouwiki.parser.js"></script>
+  <script src="/components/nouwiki/js/nouwiki.init.js"></script>
   <script>
     var wiki = "{{=it.wiki}}";
   </script>
@@ -58,7 +60,7 @@
   </div>
 
   <!-- Dynamic -->
-  <script src="/nouwiki/templates/nouwiki-default-template/assets/nouwiki/js/template.ui.js"></script>
+  <script src="/components/templates/nouwiki-default-template/assets/nouwiki/js/template.ui.js"></script>
 
   <!-- Global User JS -->
   {{ for(var i in it.global.js) { }}

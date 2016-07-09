@@ -32,13 +32,13 @@ window.onbeforeunload = confirmOnPageExit;
 //window.onbeforeunload = null;
 
 // nouwiki-init will call window.ready once its done
-if (window.nouwiki.ready == true) {
+if (nouwiki_global.nouwiki.ready == true) {
   start();
 } else {
-  window.nouwiki.ready = start;
+  nouwiki_global.nouwiki.ready = start;
 }
 function start() {
-  window.nouwiki.ready = true;
+  nouwiki_global.nouwiki.ready = true;
   $("#controles").removeClass("disabled");
 }
 
@@ -54,14 +54,14 @@ myCodeMirror.on("change", function(cm, change) {
   if (first) {
     first = false;
   } else {
-    window.nouwiki.plugins = [];
+    nouwiki_global.nouwiki.plugins = [];
   }
-  fragment = window.nouwiki.parse.parse(window.nouwiki.origin.page, myCodeMirror.getValue(), window.nouwiki.config, undefined).fragment;
+  fragment = nouwiki_global.parser.parse(nouwiki_global.nouwiki.title, nouwiki_global.nouwiki.nouwiki.wiki_name, myCodeMirror.getValue(), undefined, undefined).fragment;
   $("#preview").html(fragment);
 });
 
 $("#edit").click(function() {
-  if (window.nouwiki.ready == true) {
+  if (nouwiki_global.nouwiki.ready == true) {
     edit();
   }
 });
@@ -71,7 +71,7 @@ function edit() {
   getMarkupFile();
 }
 function getMarkupFile() {
-  $.ajax(window.nouwiki.origin.markup_loc, {
+  $.ajax(nouwiki_global.nouwiki.origin.markup_loc, {
     dataType : 'text',
     type : 'GET',
     cache: false,
@@ -127,7 +127,7 @@ function create() {
   $.ajax({
       url: '/api/create',
       type: 'POST',
-      data: window.nouwiki.origin.page,
+      data: nouwiki_global.nouwiki.title,
       contentType: "text/plain",
       success: function(result) {
         document.location.reload(true);
@@ -144,7 +144,7 @@ function remove() {
     $.ajax({
         url: '/api/remove',
         type: 'POST',
-        data: window.nouwiki.origin.page,
+        data: nouwiki_global.nouwiki.title,
         contentType: "text/plain",
         success: function(result) {
           document.location.reload(true);
