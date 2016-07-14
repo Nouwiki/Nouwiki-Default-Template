@@ -7,19 +7,16 @@ module.exports = {
   entry: {
     "static": [
       './assets_src/static/css/normalize.css',
-      './assets_src/static/css/github-markdown.css',
       './assets_src/static/css/medium-font.css',
       './assets_src/static/css/style.css'
     ],
     "dynamic": [
       './assets_src/static/css/normalize.css',
-      './assets_src/static/css/github-markdown.css',
       './assets_src/static/css/medium-font.css',
       './assets_src/static/css/style.css'
     ],
     "nouwiki": [
       './assets_src/static/css/normalize.css',
-      './assets_src/static/css/github-markdown.css',
       './assets_src/static/css/medium-font.css',
       './assets_src/static/css/style.css',
 

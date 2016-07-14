@@ -1,15 +1,17 @@
-<!DOCTYPE html>
+getTemplate({
+	"template": `<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-	<title>{{=it.wiki}}: {{=it.title}}</title>
+	<title>{{=it.wikiName}}: {{=it.title}}</title>
 	<!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 
 	<!-- Static -->
-	<link rel="stylesheet" href="./components/templates/nouwiki-default-template/assets/static/css/template.ui.css">
+	<link rel="stylesheet" href="{{=it.nouwiki.markupBody}}">
+	<link rel="stylesheet" href="{{=it.nouwiki.template}}/assets/static/css/template.ui.css">
 
 	<!-- Global User Import -->
   {{ for(var i in it.global.import) { }}
@@ -35,12 +37,12 @@
 	<div id="controles">
     <a href="./static.html"><button id="home">Home</button></a>
   </div>
-	<div id="content" class="markdown-body">
+	<div id="content" class="markup-body">
 	{{=it.fragment}}
 	</div>
 
 	<!-- Static -->
-  <script src="./components/templates/nouwiki-default-template/assets/static/js/template.ui.js"></script>
+  <script src="{{=it.nouwiki.template}}/assets/static/js/template.ui.js"></script>
 
 	<!-- Global User JS -->
 	{{ for(var i in it.global.js) { }}
@@ -52,4 +54,5 @@
 	<script src="{{=it.local.js[i]}}"></script>
 	{{ } }}
 </body>
-</html>
+</html>`
+});

@@ -144,10 +144,37 @@ function remove() {
     $.ajax({
         url: '/api/remove',
         type: 'POST',
-        data: nouwiki_global.nouwiki.title,
+        data: nouwiki_global.nouwiki.origin.page,
         contentType: "text/plain",
         success: function(result) {
+          console.log(result)
           document.location.reload(true);
+        }
+    });
+  }
+}
+
+$("#rename").click(function() {
+  rename();
+});
+function rename() {
+  var result = prompt("Page name: ", nouwiki_global.nouwiki.origin.page);
+  if (result && result != nouwiki_global.nouwiki.origin.page) {
+    $.ajax({
+        url: '/api/rename',
+        type: 'POST',
+        data: JSON.stringify({"old": nouwiki_global.nouwiki.origin.page, "new": result}),
+        contentType: "text/plain",
+        dataType:"json",
+        success: function(result) {
+          /*console.log(result)
+          document.location.reload(true);*/
+        },
+        error: function(e) {
+          //console.log("e", e)
+        },
+        complete: function(c) {
+          window.location.href = nouwiki_global.nouwiki.origin.root+"wiki/"+result;
         }
     });
   }
@@ -163,6 +190,7 @@ $("#search_pages").keyup(function() {
         contentType: "text/plain",
         success: function(result) {
           var matches = result.matches;
+          console.log(matches)
           var lis = "";
           for (var p in matches) {
             var matchLower = matches[p].toLowerCase();

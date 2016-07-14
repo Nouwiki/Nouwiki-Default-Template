@@ -12,23 +12,17 @@ body {
   font-family: medium-content-sans-serif-font, "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-#content.markdown-body, #preview.markdown-body {
-  color: #333;
-  font-size: 1.25em;
-  font-family: medium-content-sans-serif-font, "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
-
 #content {
   margin: 30px;
   margin-top: 57px;
 }
 
 #controles {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   border-bottom: 0px solid #333;
-  /*background-color: #FCFCFC;*/
+  background-color: #fff;
   width: 100%;
 }
 
