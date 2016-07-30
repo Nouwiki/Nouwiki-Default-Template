@@ -7,7 +7,20 @@ require('codemirror/mode/markdown/markdown');
 require('codemirror/addon/scroll/simplescrollbars.css');
 require('codemirror/addon/scroll/simplescrollbars.js');
 
+var h = require('virtual-dom/h');
+var diff = require('virtual-dom/diff');
+var patch = require('virtual-dom/patch');
+var createElement = require('virtual-dom/create-element');
+var virtual = require('virtual-html');
+var VNode = require('virtual-dom/vnode/vnode');
+var VText = require('virtual-dom/vnode/vtext');
+var convertHTML = require('html-to-vdom')({
+    VNode: VNode,
+    VText: VText
+});
+
 var markupText = "";
+var edited = false;
 var confirmOnPageExit = function (e)
 {
   if (markupText != myCodeMirror.getValue()) {
@@ -26,6 +39,7 @@ var confirmOnPageExit = function (e)
     return message;
   }
 };
+
 // Turn it on - assign the function that returns the string
 window.onbeforeunload = confirmOnPageExit;
 // Turn it off - remove the function entirely
@@ -39,7 +53,8 @@ if (nouwiki_global.nouwiki.ready == true) {
 }
 function start() {
   nouwiki_global.nouwiki.ready = true;
-  $("#controles").removeClass("disabled");
+  $("#controles button").attr("disabled", false);
+  $("#save").attr("disabled", true);
 }
 
 var myCodeMirror = CodeMirror.fromTextArea($("#editor textarea")[0], {
@@ -48,23 +63,195 @@ var myCodeMirror = CodeMirror.fromTextArea($("#editor textarea")[0], {
   mode: "markdown",
   scrollbarStyle: "overlay"
 });
+
+var previewVDOM = virtual('<div id="preview" class="markup-body"></div>'); // or virtual('...
+var previewNode = createElement(previewVDOM);
+$("#editor").append(previewNode);
+var preview = false;
+var src = false;
+$("#preview").scroll(previewScroll);
+myCodeMirror.on("scroll", srcScroll);
+/*$(".CodeMirror").bind('scroll touchmove mousedown wheel DOMMouseScroll mousewheel keyup', function(e){
+  if ( e.which > 0 || e.type == "mousedown" || e.type == "mousewheel" || e.type == "touchmove" || e.type == "scroll"){
+    srcScroll();
+  }
+})*/
+
+var dom_c = {};
+var update_dom_catch = true; // DOM
+var update_catch = true; // Length
+
+var pre_c = {}
+function previewScroll() {
+  if (!src) {
+    // DOM Catch
+    if (update_dom_catch) {
+      update_dom_catch = false;
+      updateDOMCatch();
+    }
+
+    var res_add = $("#editor .CodeMirror").position().top;
+    var src_add = 30;
+
+    // Get nearst and next, if not same update cache
+    update_catch = getNearest(pre_c, getTopRes, res_add);
+
+    // update cach2 (length)
+    if (update_catch) {
+      update_catch = false;
+      // The length between the two lines in pixels
+      pre_c.res_length = (pre_c.next_pos-pre_c.nearest_pos);
+      pre_c.src_last_pos = myCodeMirror.heightAtLine(parseInt(dom_c.lines[pre_c.nearest]), "local");
+      pre_c.src_next_pos = myCodeMirror.heightAtLine(parseInt(dom_c.lines[pre_c.next]), "local");
+      pre_c.src_length = Math.abs(pre_c.src_last_pos-pre_c.src_next_pos);
+    }
+
+    // How far beyond in pixels is it from it
+    var offset = pre_c.nearest_pos;
+    if (offset > 0) { // Top
+      offset = 0;
+    } else {
+      offset = Math.abs(offset);
+    }
+
+    // The persentage of the offset in relation to length
+    var per = offset / pre_c.res_length;
+    // Add the same number of pixels in % in src that the offset in result is
+    var pixels = pre_c.src_length*per;
+
+    //myCodeMirror.scrollTo(0, t);
+    //$('.CodeMirror-scroll').scrollTop(0).scrollTop(t);
+    var v = (pre_c.src_last_pos-src_add)+pixels;
+    preview = true;
+    myCodeMirror.scrollTo(undefined, v);
+  } else {
+    src = false;
+  }
+}
+var src_c = {}
+function srcScroll() {
+  if (!preview) {
+    // DOM Catch
+    if (update_dom_catch) {
+      update_dom_catch = false;
+      updateDOMCatch();
+    }
+
+    var res_add = $("#editor .CodeMirror").position().top;
+    var src_add = res_add+30;
+
+    // Get nearst and next, if not same update cache
+    update_catch = getNearest(src_c, getTopSrc, src_add);
+
+    // update cach2 (length)
+    src_c.res_last_pos = dom_c.lines_el[src_c.nearest].position().top;
+    if (update_catch) {
+      update_catch = false;
+      // The length between the two lines in pixels
+      src_c.src_length = (src_c.next_pos-src_c.nearest_pos);
+      //src_c.res_last_pos = dom_c.lines_el[src_c.nearest].position().top;
+      src_c.res_next_pos = dom_c.lines_el[src_c.next].position().top;
+      src_c.res_length = Math.abs(src_c.res_last_pos-src_c.res_next_pos);
+    }
+
+    // How far beyond in pixels is it from it
+    var offset = src_c.nearest_pos;
+    if (offset > 0) { // Top
+      offset = 0;
+    } else {
+      offset = Math.abs(offset);
+    }
+
+    // The persentage of the offset in relation to length
+    var per = offset / src_c.src_length;
+    // Add the same number of pixels in % in src that the offset in result is
+    var pixels = src_c.res_length*per;
+
+    //myCodeMirror.scrollTo(0, t);
+    //$('.CodeMirror-scroll').scrollTop(0).scrollTop(t);
+    var v = (src_c.res_last_pos+dom_c.pre.scrollTop()-res_add)+pixels; // Go to line, plus 30 padding + offset pixels
+    src = true;
+    dom_c.pre.scrollTop(v);
+  } else {
+    preview = false;
+  }
+}
+function getTopSrc(line) {
+  return myCodeMirror.heightAtLine(parseInt(dom_c.lines[line]), "page");
+}
+function getTopRes(line) {
+  return dom_c.lines_el[line].position().top;
+}
+function updateDOMCatch() {
+  dom_c.pre = $("#editor #preview");
+  dom_c.lines = [];
+  dom_c.lines_el = [];
+  dom_c.pre.children(".line").each(function() {
+    dom_c.lines.push($(this)[0].dataset.line);
+    dom_c.lines_el.push($(this));
+  });
+}
+function getNearest(obj, getTop, add) {
+  var prev = obj.nearest;
+  obj.nearest = 0
+  obj.nearest_pos = getTop(obj.nearest)-add;
+  var top = getTop(obj.nearest)-add;
+  for (var l = 1; l < dom_c.lines.length; l += 1) {
+    top = getTop(l)-add;
+    if (top <= 0 && top > obj.nearest_pos) {
+      obj.nearest = parseInt(l);
+      obj.nearest_pos = top;
+    } else if (top > 0) {
+      break;
+    }
+  }
+  if (obj.nearest != prev) {
+    obj.next = obj.nearest + 1;
+    obj.next_pos = getTop(obj.next)-add;
+    return true;
+  } else {
+    return false;
+  }
+}
+
 var fragment;
 var first = true;
 myCodeMirror.on("change", function(cm, change) {
+  checkEdits();
+  update_dom_catch = true;
+  update_catch = true;
+
   if (first) {
     first = false;
   } else {
     nouwiki_global.nouwiki.plugins = [];
   }
   fragment = nouwiki_global.parser.parse(nouwiki_global.nouwiki.title, nouwiki_global.nouwiki.nouwiki.wiki_name, myCodeMirror.getValue(), undefined, undefined).fragment;
-  $("#preview").html(fragment);
-});
+  //$("#preview").html(fragment);
 
-$("#edit").click(function() {
-  if (nouwiki_global.nouwiki.ready == true) {
-    edit();
+  try {
+    var newPreviewVDOM = virtual('<div id="preview" class="markup-body">'+fragment+'</div>'); // or virtual('...
+    var patches = diff(previewVDOM, newPreviewVDOM);
+    previewNode = patch(previewNode, patches);
+    previewVDOM = newPreviewVDOM;
+  } catch(e) {
+    $("#preview").html(fragment);
   }
 });
+
+
+$("#edit").click(function() {
+  startEdit();
+});
+function startEdit() {
+  if (nouwiki_global.nouwiki.ready == true) {
+    edit();
+  } else {
+    setTimeout(function() {
+      startEdit();
+    }, 100);
+  }
+}
 function edit() {
   $(".view").hide();
   $(".edit").show();
@@ -83,11 +270,11 @@ function getMarkupFile() {
 }
 
 $("#discard").click(function() {
-  var yes_discard = true;
   if (markupText != myCodeMirror.getValue()) {
-    yes_discard = confirm("Are you sure you want to discard your edit?");
-  }
-  if (yes_discard) {
+    if (confirm("Are you sure you want to discard your edit?")) {
+      discard();
+    }
+  } else {
     discard();
   }
 });
@@ -99,23 +286,37 @@ function discard() {
   markupText = empty;
   myCodeMirror.setValue(empty)
   myCodeMirror.clearHistory();
+
+  if (edited) {
+    document.location.reload(true);
+  }
 }
+
+$(window).bind('keydown', function(event) {
+  var key = String.fromCharCode(event.which).toLowerCase();
+  if (key == "s" && event.ctrlKey && markupText != myCodeMirror.getValue()) {
+    event.preventDefault();
+    save();
+  }
+});
 
 $("#save").click(function() {
   save();
 });
 function save() {
-  $(".view").show();
-  $(".edit").hide();
+  //$(".view").show();
+  //$(".edit").hide();
   var markup = myCodeMirror.getValue();
   markupText = markup;
+  checkEdits();
+  edited = true;
   $.ajax({
       url: '/api/modify',
       type: 'PUT',
       data: markup,
       contentType: "text/plain",
       success: function(result) {
-        document.location.reload(true);
+        //document.location.reload(true);
       }
   });
 }
@@ -213,3 +414,13 @@ $("#search_pages").keyup(function() {
     $("#matches").html("");
   }
 });
+
+function checkEdits() {
+  if (markupText != myCodeMirror.getValue()) {
+    $("#discard").text("Discard Edits");
+    $("#save").attr("disabled", false);
+  } else {
+    $("#discard").text("Return to Page");
+    $("#save").attr("disabled", true);
+  }
+}

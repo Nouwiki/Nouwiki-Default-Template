@@ -40,5 +40,10 @@
     "toml": "^2.3.0",
     "webpack": "^1.12.13"
   },
-  "dependencies": {}
+  "dependencies": {
+    "html-to-vdom": "^0.7.0",
+    "html2hscript": "^2.0.1",
+    "virtual-dom": "^2.1.1",
+    "virtual-html": "^2.0.0"
+  }
 }

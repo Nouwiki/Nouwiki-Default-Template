@@ -30,7 +30,7 @@ body {
   color: #333;
 }
 
-#controles.disabled button {
+/*#controles.disabled button {
   opacity: 0.7;
   color: #999;
 }
@@ -38,7 +38,7 @@ body {
 #controles.disabled button#home {
   opacity: 1.0;
   color: #333;
-}
+}*/
 
 #controles button {
   float: left;
@@ -46,4 +46,9 @@ body {
   border: 0px;
   border-right: 2px solid #FFF;
   padding: 10px;
+}
+
+#controles button:disabled {
+  opacity: 0.7;
+  color: #999;
 }
