@@ -240,6 +240,11 @@ myCodeMirror.on("change", function(cm, change) {
 });
 
 
+if (nouwiki_global.mode == "edit") {
+  $(".view").hide();
+  $(".edit").show();
+  startEdit();
+}
 $("#edit").click(function() {
   startEdit();
 });
