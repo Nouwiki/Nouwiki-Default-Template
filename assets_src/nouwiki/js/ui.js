@@ -241,10 +241,16 @@ myCodeMirror.on("change", function(cm, change) {
     var patches = diff(previewVDOM, newPreviewVDOM); // diff against previeous dom
     previewNode = patch(previewNode, patches); // patch against previeous dom
     previewVDOM = newPreviewVDOM;
-    reloadJS(loadPreview);
+    clearTimeout(loadJS);
+    loadJS = setTimeout(function() {
+      reloadJS(loadPreview);
+    }, 750);
   } catch(e) {
     $("#preview").html(fragment);
-    reloadJS();
+    clearTimeout(loadJS);
+    loadJS = setTimeout(function() {
+      reloadJS()
+    }, 750);
   }
 });
 
