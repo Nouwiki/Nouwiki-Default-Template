@@ -4,7 +4,7 @@ getTemplate({
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>{{=it.wikiName}}: {{=it.title}}</title>
+  <title>{{=it.nouwiki.wikiName}}: {{=it.title}}</title>
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
@@ -65,12 +65,12 @@ getTemplate({
 
   <!-- Global User JS -->
   {{ for(var i in it.global.js) { }}
-  <script src="{{=it.global.js[i]}}"></script>
+  <script class="global_js" src="{{=it.global.js[i]}}"></script>
   {{ } }}
 
   <!-- Local User JS -->
   {{ for(var i in it.local.js) { }}
-  <script src="{{=it.local.js[i]}}"></script>
+  <script class="local_js" src="{{=it.local.js[i]}}"></script>
   {{ } }}
 </body>
 </html>`

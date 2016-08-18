@@ -46,12 +46,12 @@ getTemplate({
 
 		<!-- Global User JS -->
 		{{ for(var i in it.global.js) { }}
-		<script src="{{=it.global.js[i]}}"></script>
+		<script class="global_js" src="{{=it.global.js[i]}}"></script>
 		{{ } }}
 
 		<!-- Local User JS -->
 		{{ for(var i in it.local.js) { }}
-		<script src="{{=it.local.js[i]}}"></script>
+		<script class="local_js" src="{{=it.local.js[i]}}"></script>
 		{{ } }}
 	</body>
 	</html>`

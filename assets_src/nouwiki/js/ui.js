@@ -216,6 +216,7 @@ function getNearest(obj, getTop, add) {
 
 var fragment;
 var first = true;
+var loadJS;
 myCodeMirror.on("change", function(cm, change) {
   checkEdits();
   update_dom_catch = true;
@@ -229,15 +230,31 @@ myCodeMirror.on("change", function(cm, change) {
   fragment = nouwiki_global.parser.parse(nouwiki_global.nouwiki.title, nouwiki_global.nouwiki.nouwiki.wiki_name, myCodeMirror.getValue(), undefined, undefined).fragment;
   //$("#preview").html(fragment);
 
+  /*
+    - Get new DOM
+    - Get Diff
+    - patch
+  */
+
   try {
-    var newPreviewVDOM = virtual('<div id="preview" class="markup-body">'+fragment+'</div>'); // or virtual('...
-    var patches = diff(previewVDOM, newPreviewVDOM);
-    previewNode = patch(previewNode, patches);
+    var newPreviewVDOM = virtual('<div id="preview" class="markup-body">'+fragment+'</div>'); // new dom
+    var patches = diff(previewVDOM, newPreviewVDOM); // diff against previeous dom
+    previewNode = patch(previewNode, patches); // patch against previeous dom
     previewVDOM = newPreviewVDOM;
+    reloadJS(loadPreview);
   } catch(e) {
     $("#preview").html(fragment);
+    reloadJS();
   }
 });
+
+function loadPreview() {
+  var j = $("#preview").html();
+  var jsDOM = virtual('<div id="preview" class="markup-body">'+j+'</div>');
+  var patches = diff(previewVDOM, jsDOM); // diff against previeous dom
+  previewNode = patch(previewNode, patches); // patch against previeous dom
+  previewVDOM = jsDOM;
+}
 
 
 if (nouwiki_global.mode == "edit") {
@@ -386,6 +403,14 @@ function rename() {
   }
 }
 
+$("#refresh").click(function() {
+  refresh();
+});
+function refresh() {
+  $("#preview").html(fragment);
+  reloadJS();
+}
+
 $("#search_pages").keyup(function() {
   var val = $(this).val();
   if (val != "" && val != undefined && val != null) {
@@ -428,4 +453,25 @@ function checkEdits() {
     $("#discard").text("Return to Page");
     $("#save").attr("disabled", true);
   }
+}
+
+function reloadJS(f) {
+  var n = 0;
+  n += $(".global_js").length;
+  $(".global_js").each(function() {
+    var src = $(this).attr("src");
+    var body = document.getElementsByTagName('body')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = src;
+    script.className = "global_js";
+    script.onload = function() {
+      n -= 1;
+      if (n == 0) {
+        f();
+      }
+    }
+    body.appendChild(script);
+    $(this).remove();
+  })
 }
