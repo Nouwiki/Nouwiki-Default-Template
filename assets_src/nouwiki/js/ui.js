@@ -19,6 +19,8 @@ var convertHTML = require('html-to-vdom')({
     VText: VText
 });
 
+var jsReloaded = false;
+
 var markupText = "";
 var edited = false;
 var confirmOnPageExit = function (e)
@@ -237,29 +239,34 @@ myCodeMirror.on("change", function(cm, change) {
   */
 
   try {
-    var newPreviewVDOM = virtual('<div id="preview" class="markup-body">'+fragment+'</div>'); // new dom
-    var patches = diff(previewVDOM, newPreviewVDOM); // diff against previeous dom
-    previewNode = patch(previewNode, patches); // patch against previeous dom
-    previewVDOM = newPreviewVDOM;
-    clearTimeout(loadJS);
-    loadJS = setTimeout(function() {
-      reloadJS(loadPreview);
-    }, 500);
+    if (!jsReloaded) {
+      var newPreviewVDOM = virtual('<div id="preview" class="markup-body">'+fragment+'</div>'); // new dom
+      var patches = diff(previewVDOM, newPreviewVDOM); // diff against previeous dom
+      previewNode = patch(previewNode, patches); // patch against previeous dom
+      previewVDOM = newPreviewVDOM;
+      /*clearTimeout(loadJS);
+      loadJS = setTimeout(function() {
+        reloadJS(loadPreview);
+      }, 500);*/
+    } else {
+      $("#preview").html(fragment);
+      $("#refresh").attr("disabled", false);
+    }
   } catch(e) {
     $("#preview").html(fragment);
-    clearTimeout(loadJS);
+    /*clearTimeout(loadJS);
     loadJS = setTimeout(function() {
       reloadJS()
-    }, 500);
+    }, 500);*/
   }
 });
 
 function loadPreview() {
-  var j = $("#preview").html();
+  /*var j = $("#preview").html();
   var jsDOM = virtual('<div id="preview" class="markup-body">'+j+'</div>');
   var patches = diff(previewVDOM, jsDOM); // diff against previeous dom
   previewNode = patch(previewNode, patches); // patch against previeous dom
-  previewVDOM = jsDOM;
+  previewVDOM = jsDOM;*/
 }
 
 var contentCatch = "";
@@ -413,10 +420,11 @@ function rename() {
 }
 
 $("#refresh").click(function() {
+  $("#refresh").attr("disabled", true);
   refresh();
 });
 function refresh() {
-  $("#preview").html(fragment);
+  //$("#preview").html(fragment);
   reloadJS();
 }
 
@@ -465,6 +473,8 @@ function checkEdits() {
 }
 
 function reloadJS(f) {
+  jsReloaded = true;
+  f = f || function() {};
   var n = 0;
   n += $(".global_js").length;
   $(".global_js").each(function() {

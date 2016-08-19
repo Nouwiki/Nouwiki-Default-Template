@@ -51,7 +51,7 @@ getTemplate({
     <button id="save" class="edit" disabled>Save Edits</button>
     <button id="remove" class="edit" disabled>Delete Page</button>
     <button id="rename" class="edit" disabled>Rename Page</button>
-    <button id="refresh" class="edit" disabled>Refresh Preview</button>
+    <button id="refresh" class="edit" disabled>Run Script(s)</button>
     <div id="right_controles">
       <input id="search_pages" type="text" placeholder="Search Pages" />
       <ul id="matches">
