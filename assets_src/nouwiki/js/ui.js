@@ -244,13 +244,13 @@ myCodeMirror.on("change", function(cm, change) {
     clearTimeout(loadJS);
     loadJS = setTimeout(function() {
       reloadJS(loadPreview);
-    }, 750);
+    }, 500);
   } catch(e) {
     $("#preview").html(fragment);
     clearTimeout(loadJS);
     loadJS = setTimeout(function() {
       reloadJS()
-    }, 750);
+    }, 500);
   }
 });
 
@@ -262,7 +262,7 @@ function loadPreview() {
   previewVDOM = jsDOM;
 }
 
-
+var contentCatch = "";
 if (nouwiki_global.mode == "edit") {
   $(".view").hide();
   $(".edit").show();
@@ -283,6 +283,8 @@ function startEdit() {
 function edit() {
   $(".view").hide();
   $(".edit").show();
+  contentCatch = $("#content").html();
+  $("#content").html("");
   getMarkupFile();
 }
 function getMarkupFile() {
@@ -307,6 +309,7 @@ $("#discard").click(function() {
   }
 });
 function discard() {
+  $("#content").html(contentCatch);
   $(".view").show();
   $(".edit").hide();
 
