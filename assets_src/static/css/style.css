@@ -13,12 +13,14 @@ body {
 }
 
 #content {
-  margin: 0 16px;
-  margin-top: 57px;
+  /*margin-top: 57px;*/
+  margin-top: 74px;
   margin-bottom: 30px;
+  margin-left: 30px;
+  margin-right: 30px;
 }
 
-@media (min-width: 720px) {
+/*@media (min-width: 720px) {
   #content {
     max-width: 900px;
     margin: 0 3.35em;
@@ -35,7 +37,7 @@ body {
     margin-top: 57px;
     margin-bottom: 30px;
   }
-}
+}*/
 
 #controles {
   position: fixed;

@@ -49,7 +49,7 @@ getTemplate({
     <button id="edit" class="view">Edit</button>
     <button id="discard" class="edit" disabled>Return to Page</button>
     <button id="save" class="edit" disabled>Save Edits</button>
-    <button id="refresh" class="edit" disabled>Run Script(s)</button>
+    <button id="run" class="edit" disabled>Run Script(s)</button>
     <!--<button id="remove" class="edit" disabled>Delete Page</button>
     <button id="rename" class="edit" disabled>Rename Page</button>-->
     <div id="right_controles">

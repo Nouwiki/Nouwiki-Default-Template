@@ -1,4 +1,7 @@
-var $ = require("jquery");
+var $ = require("jquery"); // jQuery: DOM manipulation
+
+
+/* CodeMirror: The text editor */
 require('codemirror/lib/codemirror.css');
 var CodeMirror = require("codemirror");
 require('codemirror/mode/javascript/javascript');
@@ -7,25 +10,20 @@ require('codemirror/mode/markdown/markdown');
 require('codemirror/addon/scroll/simplescrollbars.css');
 require('codemirror/addon/scroll/simplescrollbars.js');
 
-var h = require('virtual-dom/h');
+
+/* Virtual-Dom: Incremental Update*/
 var diff = require('virtual-dom/diff');
 var patch = require('virtual-dom/patch');
 var createElement = require('virtual-dom/create-element');
 var virtual = require('virtual-html');
-var VNode = require('virtual-dom/vnode/vnode');
-var VText = require('virtual-dom/vnode/vtext');
-var convertHTML = require('html-to-vdom')({
-    VNode: VNode,
-    VText: VText
-});
 
-var jsReloaded = false;
 
-var markupText = "";
-var edited = false;
+/* Warnings about unsaved edits so you don't loose content */
+var originalMarkupText = "";
+var newMarkupText = "";
 var confirmOnPageExit = function (e)
 {
-  if (markupText != myCodeMirror.getValue()) {
+  if (originalMarkupText != newMarkupText) {
     // If we haven't been passed the event get the window.event
     e = e || window.event;
 
@@ -41,24 +39,23 @@ var confirmOnPageExit = function (e)
     return message;
   }
 };
-
-// Turn it on - assign the function that returns the string
 window.onbeforeunload = confirmOnPageExit;
-// Turn it off - remove the function entirely
-//window.onbeforeunload = null;
 
-// nouwiki-init will call window.ready once its done
-if (nouwiki_global.nouwiki.ready == true) {
+
+// nouwiki-init will call nouwiki_global.ready once its done
+if (nouwiki_global.ready == true) {
   start();
 } else {
-  nouwiki_global.nouwiki.ready = start;
+  nouwiki_global.ready = start;
 }
 function start() {
-  nouwiki_global.nouwiki.ready = true;
+  nouwiki_global.ready = true;
   $("#controles button").attr("disabled", false);
   $("#save").attr("disabled", true);
 }
 
+
+/* Init CodeMirror */
 var myCodeMirror = CodeMirror.fromTextArea($("#editor textarea")[0], {
   lineWrapping: true,
   theme: 'prose-bright',
@@ -66,208 +63,64 @@ var myCodeMirror = CodeMirror.fromTextArea($("#editor textarea")[0], {
   scrollbarStyle: "overlay"
 });
 
-var previewVDOM = virtual('<div id="preview" class="markup-body"></div>'); // or virtual('...
+
+/* Init preview */
+var previewVDOM = virtual('<div id="vdom"></div>');
 var previewNode = createElement(previewVDOM);
-$("#editor").append(previewNode);
-var preview = false;
-var src = false;
-$("#preview").scroll(previewScroll);
-myCodeMirror.on("scroll", srcScroll);
-/*$(".CodeMirror").bind('scroll touchmove mousedown wheel DOMMouseScroll mousewheel keyup', function(e){
-  if ( e.which > 0 || e.type == "mousedown" || e.type == "mousewheel" || e.type == "touchmove" || e.type == "scroll"){
-    srcScroll();
-  }
-})*/
+$("#preview").append(previewNode);
 
-var dom_c = {};
-var update_dom_catch = true; // DOM
-var update_catch = true; // Length
 
-var pre_c = {}
-function previewScroll() {
-  if (!src) {
-    // DOM Catch
-    if (update_dom_catch) {
-      update_dom_catch = false;
-      updateDOMCatch();
-    }
+/* Sync-Scroll Event Listeners */
+var syncScroll = require("./sync-scroll");
+syncScroll.myCodeMirror = myCodeMirror;
+$("#preview").scroll(syncScroll.previewScroll);
+myCodeMirror.on("scroll", syncScroll.srcScroll);
 
-    var res_add = $("#editor .CodeMirror").position().top;
-    var src_add = 30;
-
-    // Get nearst and next, if not same update cache
-    update_catch = getNearest(pre_c, getTopRes, res_add);
-
-    // update cach2 (length)
-    if (update_catch) {
-      update_catch = false;
-      // The length between the two lines in pixels
-      pre_c.res_length = (pre_c.next_pos-pre_c.nearest_pos);
-      pre_c.src_last_pos = myCodeMirror.heightAtLine(parseInt(dom_c.lines[pre_c.nearest]), "local");
-      pre_c.src_next_pos = myCodeMirror.heightAtLine(parseInt(dom_c.lines[pre_c.next]), "local");
-      pre_c.src_length = Math.abs(pre_c.src_last_pos-pre_c.src_next_pos);
-    }
-
-    // How far beyond in pixels is it from it
-    var offset = pre_c.nearest_pos;
-    if (offset > 0) { // Top
-      offset = 0;
-    } else {
-      offset = Math.abs(offset);
-    }
-
-    // The persentage of the offset in relation to length
-    var per = offset / pre_c.res_length;
-    // Add the same number of pixels in % in src that the offset in result is
-    var pixels = pre_c.src_length*per;
-
-    //myCodeMirror.scrollTo(0, t);
-    //$('.CodeMirror-scroll').scrollTop(0).scrollTop(t);
-    var v = (pre_c.src_last_pos-src_add)+pixels;
-    preview = true;
-    myCodeMirror.scrollTo(undefined, v);
-  } else {
-    src = false;
-  }
-}
-var src_c = {}
-function srcScroll() {
-  if (!preview) {
-    // DOM Catch
-    if (update_dom_catch) {
-      update_dom_catch = false;
-      updateDOMCatch();
-    }
-
-    var res_add = $("#editor .CodeMirror").position().top;
-    var src_add = res_add+30;
-
-    // Get nearst and next, if not same update cache
-    update_catch = getNearest(src_c, getTopSrc, src_add);
-
-    // update cach2 (length)
-    src_c.res_last_pos = dom_c.lines_el[src_c.nearest].position().top;
-    if (update_catch) {
-      update_catch = false;
-      // The length between the two lines in pixels
-      src_c.src_length = (src_c.next_pos-src_c.nearest_pos);
-      //src_c.res_last_pos = dom_c.lines_el[src_c.nearest].position().top;
-      src_c.res_next_pos = dom_c.lines_el[src_c.next].position().top;
-      src_c.res_length = Math.abs(src_c.res_last_pos-src_c.res_next_pos);
-    }
-
-    // How far beyond in pixels is it from it
-    var offset = src_c.nearest_pos;
-    if (offset > 0) { // Top
-      offset = 0;
-    } else {
-      offset = Math.abs(offset);
-    }
-
-    // The persentage of the offset in relation to length
-    var per = offset / src_c.src_length;
-    // Add the same number of pixels in % in src that the offset in result is
-    var pixels = src_c.res_length*per;
-
-    //myCodeMirror.scrollTo(0, t);
-    //$('.CodeMirror-scroll').scrollTop(0).scrollTop(t);
-    var v = (src_c.res_last_pos+dom_c.pre.scrollTop()-res_add)+pixels; // Go to line, plus 30 padding + offset pixels
-    src = true;
-    dom_c.pre.scrollTop(v);
-  } else {
-    preview = false;
-  }
-}
-function getTopSrc(line) {
-  return myCodeMirror.heightAtLine(parseInt(dom_c.lines[line]), "page");
-}
-function getTopRes(line) {
-  return dom_c.lines_el[line].position().top;
-}
-function updateDOMCatch() {
-  dom_c.pre = $("#editor #preview");
-  dom_c.lines = [];
-  dom_c.lines_el = [];
-  dom_c.pre.children(".line").each(function() {
-    dom_c.lines.push($(this)[0].dataset.line);
-    dom_c.lines_el.push($(this));
-  });
-}
-function getNearest(obj, getTop, add) {
-  var prev = obj.nearest;
-  obj.nearest = 0
-  obj.nearest_pos = getTop(obj.nearest)-add;
-  var top = getTop(obj.nearest)-add;
-  for (var l = 1; l < dom_c.lines.length; l += 1) {
-    top = getTop(l)-add;
-    if (top <= 0 && top > obj.nearest_pos) {
-      obj.nearest = parseInt(l);
-      obj.nearest_pos = top;
-    } else if (top > 0) {
-      break;
-    }
-  }
-  if (obj.nearest != prev) {
-    obj.next = obj.nearest + 1;
-    obj.next_pos = getTop(obj.next)-add;
-    return true;
-  } else {
-    return false;
-  }
-}
 
 var fragment;
 var first = true;
-var loadJS;
+var brake = false;
 myCodeMirror.on("change", function(cm, change) {
-  checkEdits();
-  update_dom_catch = true;
-  update_catch = true;
+  newMarkupText = myCodeMirror.getValue();
+  if (originalMarkupText != newMarkupText) {
+    $("#discard").text("Discard Edits");
+    $("#save").attr("disabled", false);
+  } else {
+    $("#discard").text("Return to Page");
+    $("#save").attr("disabled", true);
+  }
 
-  if (first) {
+  syncScroll.update_dom_catch = true;
+  syncScroll.update_catch = true;
+
+  if (first) { // ?
     first = false;
   } else {
-    nouwiki_global.nouwiki.plugins = [];
+    nouwiki_global.plugins = [];
   }
-  fragment = nouwiki_global.parser.parse(nouwiki_global.nouwiki.title, nouwiki_global.nouwiki.nouwiki.wiki_name, myCodeMirror.getValue(), undefined, undefined).fragment;
-  //$("#preview").html(fragment);
-
-  /*
-    - Get new DOM
-    - Get Diff
-    - patch
-  */
+  fragment = nouwiki_global.parser.parse(nouwiki_global.title, nouwiki_global.nouwiki.wiki_name, newMarkupText, undefined, undefined).fragment;
 
   try {
-    if (!jsReloaded) {
-      var newPreviewVDOM = virtual('<div id="preview" class="markup-body">'+fragment+'</div>'); // new dom
+    if (!scriptsLoaded && !brake) {
+      var newPreviewVDOM = virtual('<div id="vdom">'+fragment+'</div>'); // new dom
       var patches = diff(previewVDOM, newPreviewVDOM); // diff against previeous dom
       previewNode = patch(previewNode, patches); // patch against previeous dom
       previewVDOM = newPreviewVDOM;
-      /*clearTimeout(loadJS);
-      loadJS = setTimeout(function() {
-        reloadJS(loadPreview);
-      }, 500);*/
     } else {
-      $("#preview").html(fragment);
-      $("#refresh").attr("disabled", false);
+      brake = false;
+      $("#preview").html('<div id="vdom">'+fragment+'</div>');
+      previewNode = $("#vdom")[0];
+      previewVDOM = virtual('<div id="vdom">'+fragment+'</div>');
+      $("#run").attr("disabled", false);
     }
   } catch(e) {
-    $("#preview").html(fragment);
-    /*clearTimeout(loadJS);
-    loadJS = setTimeout(function() {
-      reloadJS()
-    }, 500);*/
+    brake = true;
+    $("#preview").html('<div id="vdom">'+fragment+'</div>');
+    previewNode = $("#vdom")[0];
+    $("#run").attr("disabled", false);
   }
 });
 
-function loadPreview() {
-  /*var j = $("#preview").html();
-  var jsDOM = virtual('<div id="preview" class="markup-body">'+j+'</div>');
-  var patches = diff(previewVDOM, jsDOM); // diff against previeous dom
-  previewNode = patch(previewNode, patches); // patch against previeous dom
-  previewVDOM = jsDOM;*/
-}
 
 var contentCatch = "";
 if (nouwiki_global.mode == "edit") {
@@ -275,11 +128,13 @@ if (nouwiki_global.mode == "edit") {
   $(".edit").show();
   startEdit();
 }
+
+
 $("#edit").click(function() {
   startEdit();
 });
 function startEdit() {
-  if (nouwiki_global.nouwiki.ready == true) {
+  if (nouwiki_global.ready == true) {
     edit();
   } else {
     setTimeout(function() {
@@ -295,24 +150,25 @@ function edit() {
   getMarkupFile();
 }
 function getMarkupFile() {
-  $.ajax(nouwiki_global.nouwiki.origin.markup_loc, {
+  $.ajax(nouwiki_global.origin.markup_loc, {
     dataType : 'text',
     type : 'GET',
     cache: false,
     success: function(text) {
-      markupText = text;
+      originalMarkupText = text;
       myCodeMirror.setValue(text);
       myCodeMirror.clearHistory();
   }});
 }
 
+
 $("#discard").click(function() {
-  if (markupText != myCodeMirror.getValue()) {
+  if (originalMarkupText != newMarkupText) {
     if (confirm("Are you sure you want to discard your edit?")) {
       discard();
     }
   } else {
-    discard();
+    discard(); // Return to page, not "discard"
   }
 });
 function discard() {
@@ -321,43 +177,42 @@ function discard() {
   $(".edit").hide();
 
   var empty = "";
-  markupText = empty;
+  originalMarkupText = empty;
   myCodeMirror.setValue(empty)
   myCodeMirror.clearHistory();
 
-  if (edited) {
+  if (documentHasBeenEdited) {
     document.location.reload(true);
   }
 }
 
-$(window).bind('keydown', function(event) {
-  var key = String.fromCharCode(event.which).toLowerCase();
-  if (key == "s" && event.ctrlKey && markupText != myCodeMirror.getValue()) {
-    event.preventDefault();
-    save();
-  }
-});
 
+var documentHasBeenEdited = false;
 $("#save").click(function() {
   save();
 });
 function save() {
-  //$(".view").show();
-  //$(".edit").hide();
-  var markup = myCodeMirror.getValue();
-  markupText = markup;
-  checkEdits();
-  edited = true;
+  var markup = newMarkupText;
+  originalMarkupText = markup;
+  $("#discard").text("Return to Page");
+  $("#save").attr("disabled", true);
+  documentHasBeenEdited = true;
   $.ajax({
       url: '/api/modify',
       type: 'PUT',
       data: markup,
       contentType: "text/plain",
-      success: function(result) {
-        //document.location.reload(true);
-      }
+      success: function(result) {}
   });
 }
+$(window).bind('keydown', function(event) {
+  var key = String.fromCharCode(event.which).toLowerCase();
+  if (key == "s" && event.ctrlKey && originalMarkupText != newMarkupText) {
+    event.preventDefault();
+    save();
+  }
+});
+
 
 $("#create").click(function() {
   create();
@@ -366,13 +221,14 @@ function create() {
   $.ajax({
       url: '/api/create',
       type: 'POST',
-      data: nouwiki_global.nouwiki.title,
+      data: nouwiki_global.title,
       contentType: "text/plain",
       success: function(result) {
         document.location.reload(true);
       }
   });
 }
+
 
 $("#remove").click(function() {
   remove();
@@ -383,114 +239,106 @@ function remove() {
     $.ajax({
         url: '/api/remove',
         type: 'POST',
-        data: nouwiki_global.nouwiki.origin.page,
+        data: nouwiki_global.origin.page,
         contentType: "text/plain",
         success: function(result) {
-          console.log(result)
           document.location.reload(true);
         }
     });
   }
 }
 
+
 $("#rename").click(function() {
-  rename();
-});
-function rename() {
-  var result = prompt("Page name: ", nouwiki_global.nouwiki.origin.page);
-  if (result && result != nouwiki_global.nouwiki.origin.page) {
-    $.ajax({
-        url: '/api/rename',
-        type: 'POST',
-        data: JSON.stringify({"old": nouwiki_global.nouwiki.origin.page, "new": result}),
-        contentType: "text/plain",
-        dataType:"json",
-        success: function(result) {
-          /*console.log(result)
-          document.location.reload(true);*/
-        },
-        error: function(e) {
-          //console.log("e", e)
-        },
-        complete: function(c) {
-          window.location.href = nouwiki_global.nouwiki.origin.root+"wiki/"+result;
-        }
-    });
+  var result = prompt("Page name: ", nouwiki_global.origin.page);
+  if (result && result != nouwiki_global.origin.page) {
+    rename(result);
   }
+});
+function rename(result) {
+  $.ajax({
+      url: '/api/rename',
+      type: 'POST',
+      data: JSON.stringify({"old": nouwiki_global.origin.page, "new": result}),
+      contentType: "text/plain",
+      dataType:"json",
+      success: function(result) {
+        /*console.log(result)
+        document.location.reload(true);*/
+      },
+      error: function(e) {
+        //console.log("e", e)
+      },
+      complete: function(c) {
+        window.location.href = nouwiki_global.origin.root+"wiki/"+result;
+      }
+  });
 }
 
-$("#refresh").click(function() {
-  $("#refresh").attr("disabled", true);
-  refresh();
-});
-function refresh() {
-  //$("#preview").html(fragment);
+
+var scriptsLoaded = false;
+$("#run").click(function() {
+  $("#run").attr("disabled", true);
   reloadJS();
-}
-
-$("#search_pages").keyup(function() {
-  var val = $(this).val();
-  if (val != "" && val != undefined && val != null) {
-    $.ajax({
-        url: '/api/search_pages',
-        type: 'POST',
-        data: val,
-        contentType: "text/plain",
-        success: function(result) {
-          var matches = result.matches;
-          console.log(matches)
-          var lis = "";
-          for (var p in matches) {
-            var matchLower = matches[p].toLowerCase();
-            var valLower = val.toLowerCase();
-            var i = matchLower.indexOf(valLower);
-            var ie = i+val.length;
-            var s = "";
-            if (i > 0) {
-              s = matches[p].substring(0, i);
-            }
-            var m = matches[p].substring(i, ie);
-            var e = matches[p].substring(ie);
-            var bold = s+"<b>"+m+"</b>"+e;
-            lis += "<li><a href='/wiki/"+matches[p]+"'>"+bold+"</a></li>";
-          }
-          $("#matches").html(lis);
-        }
-    });
-  } else {
-    $("#matches").html("");
-  }
 });
-
-function checkEdits() {
-  if (markupText != myCodeMirror.getValue()) {
-    $("#discard").text("Discard Edits");
-    $("#save").attr("disabled", false);
-  } else {
-    $("#discard").text("Return to Page");
-    $("#save").attr("disabled", true);
-  }
-}
-
 function reloadJS(f) {
-  jsReloaded = true;
+  scriptsLoaded = true;
   f = f || function() {};
-  var n = 0;
-  n += $(".global_js").length;
-  $(".global_js").each(function() {
-    var src = $(this).attr("src");
-    var body = document.getElementsByTagName('body')[0];
+  var n = $(".global_js, .local_js").length;
+
+  $(".global_js, .local_js").each(function() {
     var script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = src;
-    script.className = "global_js";
+    script.src = $(this).attr("src");
+    if ($(this).attr("class").indexOf("global_js") > -1) {
+      script.className = "global_js";
+    } else if ($(this).attr("class").indexOf("local_js") > -1) {
+      script.className = "local_js";
+    }
     script.onload = function() {
       n -= 1;
       if (n == 0) {
         f();
       }
     }
-    body.appendChild(script);
+    $(this).after(script);
     $(this).remove();
-  })
+  });
+}
+
+
+$("#search_pages").keyup(function() {
+  var val = $(this).val();
+  if (val != "" && val != undefined && val != null) {
+    search(val);
+  } else {
+    $("#matches").html("");
+  }
+});
+function search(val) {
+  $.ajax({
+      url: '/api/search_pages',
+      type: 'POST',
+      data: val,
+      contentType: "text/plain",
+      success: function(result) {
+        var matches = result.matches;
+        var lis = "";
+        for (var p in matches) {
+          var matchLower = matches[p].toLowerCase();
+          var valLower = val.toLowerCase();
+          var i = matchLower.indexOf(valLower);
+          var ie = i+val.length;
+          var s = "";
+          if (i > 0) {
+            s = matches[p].substring(0, i);
+          }
+          var m = matches[p].substring(i, ie);
+          var e = matches[p].substring(ie);
+          var bold = s+"<b>"+m+"</b>"+e;
+          lis += "<li><a href='/wiki/"+matches[p]+"'>"+bold+"</a></li>";
+        }
+        $("#matches").html(lis);
+      }
+  });
 }

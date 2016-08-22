@@ -1,3 +1,69 @@
+/* https://github.com/prose/prose/blob/master/style/_codemirror.scss */
+
+.CodeMirror {
+  font-family: Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.4em;
+  -webkit-font-smoothing: subpixel-antialiased;
+  height: auto;
+}
+
+.code .CodeMirror-scroll {
+  min-height: 360px;
+  height: auto;
+}
+
+.markdown .CodeMirror {
+  font-size: 14px
+}
+
+.CodeMirror-scroll {
+  /* Set scrolling behaviour here */
+  overflow: auto;
+}
+
+.CodeMirror-scrollbar-filler {
+  /* The little square between H and V scrollbars */
+  background-color: white;
+}
+
+.CodeMirror-gutters {
+  box-sizing: border-box;
+  min-height: inherit;
+  height: 100%;
+  padding-bottom: 30px;
+  background-color: transparent;
+  border-right: none;
+}
+
+.CodeMirror-linenumber {
+  padding: 0 3px 0 5px;
+  min-width: 20px;
+  text-align: right;
+  color: #d4d7d9;
+}
+
+.cm-s-prose-bright .CodeMirror-gutter {
+  border-right: 1px solid #eff3f5;
+  padding-right: 5px;
+  margin-right: 15px;
+  min-width: 2.5em;
+  padding-bottom: 30px;
+}
+
+.CodeMirror div.CodeMirror-cursor {
+  border-left: 1px solid #3D494E;
+  z-index: 3;
+}
+
+.cm-s-prose-bright .CodeMirror-cursor { border-right: 2px solid #667880; }
+.cm-s-prose-bright .CodeMirror-lines { margin: 0; }
+
+/* Shown when moving in bi-directional text */
+.CodeMirror div.CodeMirror-secondarycursor {
+  border-left: 1px solid #e0e7eb;
+}
+
 /* Prose Bright Theme
  -------------------- */
 /* Dark Grey */
@@ -47,3 +113,7 @@
 
 .cm-s-prose-bright span.cm-em         { font-style:italic; }
 .cm-s-prose-bright span.cm-strong     { font-weight:bold; }
+
+.CodeMirror {
+  color: #516066;
+}

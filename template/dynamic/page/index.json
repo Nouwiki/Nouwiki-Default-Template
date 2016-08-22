@@ -14,15 +14,15 @@ getTemplate({
   <script src="{{=it.nouwiki.nouwiki}}/js/require.js"></script>
   <script src="{{=it.nouwiki.nouwiki}}/js/nouwiki.init.min.js"></script>
   <script>
-    if (nouwiki_global.nouwiki.ready == true)
+    if (nouwiki_global.ready == true)
     {
       start();
     } else {
-      nouwiki_global.nouwiki.ready = start;
+      nouwiki_global.ready = start;
     }
     function start() {
-      nouwiki_global.nouwiki.ready = true;
-      var page = nouwiki_global.parser.parse(nouwiki_global.nouwiki.nouwiki, nouwiki_global.nouwiki.title, nouwiki_global.nouwiki.markup, nouwiki_global.nouwiki.template, nouwiki_global.nouwiki.global).page;
+      nouwiki_global.ready = true;
+      var page = nouwiki_global.parser.parse(nouwiki_global.config.nouwiki, nouwiki_global.title, nouwiki_global.markup, nouwiki_global.template, nouwiki_global.config.global).page;
       document.open("text/html", "replace");
       document.write(page);
       document.close();
