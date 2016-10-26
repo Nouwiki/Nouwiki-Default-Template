@@ -1,0 +1,119 @@
+/* https://github.com/prose/prose/blob/master/style/_codemirror.scss */
+
+.CodeMirror {
+  font-family: Roboto Mono, Menlo, monospace, Symbola;
+  font-size: 16px;
+  line-height: 1.4em;
+  -webkit-font-smoothing: subpixel-antialiased;
+  height: auto;
+}
+
+.code .CodeMirror-scroll {
+  min-height: 360px;
+  height: auto;
+}
+
+/*.markdown .CodeMirror {
+  font-size: 14px
+}*/
+
+.CodeMirror-scroll {
+  /* Set scrolling behaviour here */
+  overflow: auto;
+}
+
+.CodeMirror-scrollbar-filler {
+  /* The little square between H and V scrollbars */
+  background-color: white;
+}
+
+.CodeMirror-gutters {
+  box-sizing: border-box;
+  min-height: inherit;
+  height: 100%;
+  padding-bottom: 30px;
+  background-color: transparent;
+  border-right: none;
+}
+
+.CodeMirror-linenumber {
+  padding: 0 3px 0 5px;
+  min-width: 20px;
+  text-align: right;
+  color: #dadee4;
+}
+
+.cm-s-prose-bright .CodeMirror-gutter {
+  border-right: 1px solid #eff3f9;
+  padding-right: 5px;
+  margin-right: 15px;
+  min-width: 2.5em;
+  padding-bottom: 30px;
+}
+
+.CodeMirror div.CodeMirror-cursor {
+  border-left: 1px solid #516689;
+  z-index: 3;
+}
+
+.cm-s-prose-bright .CodeMirror-cursor { border-right: 2px solid #7789a9; }
+.cm-s-prose-bright .CodeMirror-lines { margin: 0; }
+
+/* Shown when moving in bi-directional text */
+.CodeMirror div.CodeMirror-secondarycursor {
+  border-left: 1px solid #e3e8f3;
+}
+
+/* Prose Bright Theme
+ -------------------- */
+/* Dark Grey */
+.cm-s-prose-bright                    { color:#516689; }
+.cm-s-prose-bright span.cm-header     { color:#516689; font-weight:bold;}
+.cm-s-prose-bright span.cm-variable-2 { color:#516689; }
+
+/* Medium Grey */
+.cm-s-prose-bright span.cm-meta       { color:#62769a; }
+.cm-s-prose-bright span.cm-hr         { color:#62769a;}
+
+/* Lighter Grey */
+.cm-s-prose-bright span.cm-comment    { color:#9ca2ae; }
+.cm-s-prose-bright span.cm-qualifier  { color:#9ca2ae; }
+
+/* Dark Blue/Green */
+.cm-s-prose-bright span.cm-number     { color:#007fea; }
+.cm-s-prose-bright span.cm-variable   { color:#007fea; }
+.cm-s-prose-bright span.cm-builtin    { color:#007fea; }
+.cm-s-prose-bright span.cm-link       { color:#007fea; text-decoration:underline;}
+.cm-s-prose-bright span.cm-tag        { color:#007fea; }
+
+/* Medium Blue/Green */
+.cm-s-prose-bright span.cm-string     { color:#42a2f4; }
+.cm-s-prose-bright span.cm-string-2   { color:#42a2f4; }
+.cm-s-prose-bright span.cm-quote      { color:#42a2f4;}
+.cm-s-prose-bright span.cm-atom       { color:#42a2f4; }
+
+/* Light Blue/Green */
+/*.cm-s-prose-bright .CodeMirror-selected { background:#8fccff; }*/
+
+/* Turtle Green */
+.cm-s-prose-bright span.cm-property   { color:#7acd6f; }
+.cm-s-prose-bright span.cm-operator   { color:#7acd6f; }
+.cm-s-prose-bright span.cm-variable-3 { color:#7acd6f; }
+
+/* Light Turtle Green */
+.cm-s-prose-bright span.cm-attribute  { color:#7ee476; }
+.cm-s-prose-bright span.cm-def        { color:#7ee476; }
+
+/* Brick */
+.cm-s-prose-bright span.cm-keyword    { color:#feb85e; }
+.cm-s-prose-bright span.cm-bracket    { color:#feb85e; }
+
+/* Darker Brick */
+.cm-s-prose-bright span.cm-error      { color:#fe9a58; }
+
+.cm-s-prose-bright span.cm-em         { font-style:italic; }
+.cm-s-prose-bright span.cm-strong     { font-weight:bold; }
+
+.CodeMirror {
+  color: #333333;
+}

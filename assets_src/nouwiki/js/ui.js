@@ -80,6 +80,8 @@ myCodeMirror.on("scroll", syncScroll.srcScroll);
 var fragment;
 var first = true;
 var brake = false;
+var updatePreviewTimeout;
+var delay = 50;
 myCodeMirror.on("change", function(cm, change) {
   newMarkupText = myCodeMirror.getValue();
   if (originalMarkupText != newMarkupText) {
@@ -89,7 +91,14 @@ myCodeMirror.on("change", function(cm, change) {
     $("#discard").text("Return to Page");
     $("#save").attr("disabled", true);
   }
-
+  if (first) {
+    updatePreview();
+  } else {
+    clearTimeout(updatePreviewTimeout);
+    updatePreviewTimeout = setTimeout(updatePreview, delay);
+  }
+});
+function updatePreview() {
   syncScroll.update_dom_catch = true;
   syncScroll.update_catch = true;
 
@@ -98,7 +107,7 @@ myCodeMirror.on("change", function(cm, change) {
   } else {
     nouwiki_global.plugins = [];
   }
-  fragment = nouwiki_global.parser.parse(nouwiki_global.title, nouwiki_global.nouwiki.wiki_name, newMarkupText, undefined, undefined).fragment;
+  fragment = nouwiki_global.parser.parse(nouwiki_global.conf.nou, nouwiki_global.conf.content, nouwiki_global.title, newMarkupText, undefined).fragment;
 
   try {
     if (!scriptsLoaded && !brake) {
@@ -119,8 +128,7 @@ myCodeMirror.on("change", function(cm, change) {
     previewNode = $("#vdom")[0];
     $("#run").attr("disabled", false);
   }
-});
-
+}
 
 var contentCatch = "";
 if (nouwiki_global.mode == "edit") {
@@ -143,22 +151,31 @@ function startEdit() {
   }
 }
 function edit() {
+  getMarkupFile();
   $(".view").hide();
   $(".edit").show();
   contentCatch = $("#content").html();
   $("#content").html("");
-  getMarkupFile();
 }
 function getMarkupFile() {
-  $.ajax(nouwiki_global.origin.markup_loc, {
-    dataType : 'text',
-    type : 'GET',
-    cache: false,
-    success: function(text) {
-      originalMarkupText = text;
-      myCodeMirror.setValue(text);
-      myCodeMirror.clearHistory();
-  }});
+  $.ajax({
+      url: nouwiki_global.paths.content+'api/get_page/'+nouwiki_global.origin.page,
+      type: 'GET',
+      contentType: "text/plain",
+      success: function(text) {
+        originalMarkupText = text;
+        myCodeMirror.setValue(text);
+        myCodeMirror.clearHistory();
+      },
+      error: function(resp) {
+        if (resp.status == 404) {
+          var text = resp.responseText;
+          originalMarkupText = "";
+          myCodeMirror.setValue(text);
+          myCodeMirror.clearHistory();
+        }
+      }
+  });
 }
 
 
@@ -198,7 +215,7 @@ function save() {
   $("#save").attr("disabled", true);
   documentHasBeenEdited = true;
   $.ajax({
-      url: '/api/modify',
+      url: nouwiki_global.paths.content+'api/modify',
       type: 'PUT',
       data: markup,
       contentType: "text/plain",
@@ -214,12 +231,12 @@ $(window).bind('keydown', function(event) {
 });
 
 
-$("#create").click(function() {
+/*$("#create").click(function() {
   create();
 });
 function create() {
   $.ajax({
-      url: '/api/create',
+      url: nouwiki_global.paths.content+'api/create',
       type: 'POST',
       data: nouwiki_global.title,
       contentType: "text/plain",
@@ -227,7 +244,7 @@ function create() {
         document.location.reload(true);
       }
   });
-}
+}*/
 
 
 $("#remove").click(function() {
@@ -237,9 +254,8 @@ function remove() {
   var result = confirm("Are you sure you want to remove this page?");
   if (result) {
     $.ajax({
-        url: '/api/remove',
-        type: 'POST',
-        data: nouwiki_global.origin.page,
+        url: nouwiki_global.paths.content+'api/remove/'+nouwiki_global.origin.page,
+        type: 'GET',
         contentType: "text/plain",
         success: function(result) {
           document.location.reload(true);
@@ -257,20 +273,22 @@ $("#rename").click(function() {
 });
 function rename(result) {
   $.ajax({
-      url: '/api/rename',
-      type: 'POST',
-      data: JSON.stringify({"old": nouwiki_global.origin.page, "new": result}),
+      url: nouwiki_global.paths.content+'api/rename/'+nouwiki_global.origin.page+'?to='+result,
+      type: 'GET',
       contentType: "text/plain",
       dataType:"json",
       success: function(result) {
+        console.log(result)
         /*console.log(result)
         document.location.reload(true);*/
       },
       error: function(e) {
+        console.log(e)
         //console.log("e", e)
       },
       complete: function(c) {
-        window.location.href = nouwiki_global.origin.root+"wiki/"+result;
+        console.log(c)
+        //window.location.href = nouwiki_global.origin.root+"wiki/"+result;
       }
   });
 }
@@ -317,28 +335,39 @@ $("#search_pages").keyup(function() {
 });
 function search(val) {
   $.ajax({
-      url: '/api/search_pages',
-      type: 'POST',
-      data: val,
+      url: nouwiki_global.paths.search+'api/search/'+val,
+      type: 'GET',
       contentType: "text/plain",
       success: function(result) {
         var matches = result.matches;
+        console.log(matches)
         var lis = "";
-        for (var p in matches) {
-          var matchLower = matches[p].toLowerCase();
-          var valLower = val.toLowerCase();
-          var i = matchLower.indexOf(valLower);
-          var ie = i+val.length;
-          var s = "";
-          if (i > 0) {
-            s = matches[p].substring(0, i);
+        for (var c in matches) {
+          var r = "/";
+          var keys = Object.keys(matches);
+          if (keys.length > 1) {
+            r = "/"+c+"/";
           }
-          var m = matches[p].substring(i, ie);
-          var e = matches[p].substring(ie);
-          var bold = s+"<b>"+m+"</b>"+e;
-          lis += "<li><a href='/wiki/"+matches[p]+"'>"+bold+"</a></li>";
+          for (var p in matches[c]) {
+            var matchLower = matches[c][p].toLowerCase();
+            var valLower = val.toLowerCase();
+            var i = matchLower.indexOf(valLower);
+            var ie = i+val.length;
+            var s = "";
+            if (i > 0) {
+              s = matches[c][p].substring(0, i);
+            }
+            var m = matches[c][p].substring(i, ie);
+            var e = matches[c][p].substring(ie);
+            var bold = r+s+"<b>"+m+"</b>"+e;
+            lis += "<li><a href='"+r+"wiki/"+matches[c][p]+"'>"+bold+"</a></li>";
+          }
         }
         $("#matches").html(lis);
       }
   });
 }
+
+$("#search_icon").click(function() {
+  $("#search_pages").toggleClass("show");
+})

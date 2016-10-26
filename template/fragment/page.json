@@ -1,3 +1,0 @@
-getTemplate({
-	"template": `{{=it.fragment}}`
-});

@@ -21,7 +21,8 @@ module.exports = {
       './assets_src/static/css/style.css',
 
       './assets_src/nouwiki/js/ui.js',
-      './assets_src/nouwiki/css/prose-bright.css',
+      //'./assets_src/nouwiki/css/prose-bright.css',
+      './assets_src/nouwiki/css/codemirror-theme.css',
       './assets_src/nouwiki/css/ui.css'
     ]
   },

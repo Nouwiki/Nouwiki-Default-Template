@@ -6,8 +6,8 @@
 }
 
 #preview {
-  height: calc(100% - 60px);
-  width: calc(50% - 60px);
+  height: 100%;
+  width: 50%;
   float: left;
   overflow-y: scroll;
   padding: 30px;
@@ -17,7 +17,7 @@
   height: 100%;
   width: 50%;
   float: left;
-  font-size: 1.3em;
+  font-size: 1.25em;
 }
 #editor div.CodeMirror .CodeMirror-line {
   padding-left: 30px;
@@ -30,7 +30,11 @@
 }
 
 #editor .CodeMirror-overlayscroll-horizontal div, .CodeMirror-overlayscroll-vertical div {
-  background: #6C6E71;
+  background: #d8d8d8;
+}
+
+#editor .CodeMirror {
+  font-family: "Roboto mono", Menlo, monospace, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", Symbola;
 }
 
 #edit {
@@ -45,9 +49,37 @@
   float: right;
 }
 
-#right_controles input {
-  padding: 14px;
+#right_controles input#search_pages {
+  padding: 10px;
   border: 0;
+  width: 252px;
+  background-color: #FFF;
+  line-height: inherit;
+}
+#right_controles input#search_pages::-webkit-input-placeholder {
+   color: #777;
+}
+#right_controles input#search_pages:-moz-placeholder { /* Firefox 18- */
+   color: #777;
+}
+#right_controles input#search_pages::-moz-placeholder {  /* Firefox 19+ */
+   color: #777;
+}
+#right_controles input#search_pages:-ms-input-placeholder {
+   color: #777;
+}
+
+#right_controles input#search_pages:focus::-webkit-input-placeholder {
+   color: #252525;
+}
+#right_controles input#search_pages:focus:-moz-placeholder { /* Firefox 18- */
+   color: #252525;
+}
+#right_controles input#search_pages:focus::-moz-placeholder {  /* Firefox 19+ */
+   color: #252525;
+}
+#right_controles input#search_pages:focus:-ms-input-placeholder {
+   color: #252525;
 }
 
 #right_controles ul#matches {

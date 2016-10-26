@@ -1,13 +1,9 @@
-getTemplate({
-	"template": `<!DOCTYPE html>
+<!DOCTYPE html>
 	<html>
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 		<title>{{=it.nouwiki.wikiName}}: {{=it.title}}</title>
-		<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
 
 		<!-- Static -->
 		<link rel="stylesheet" href="{{=it.nouwiki.markupBody}}">
@@ -42,7 +38,7 @@ getTemplate({
 		</div>
 
 		<!-- Static -->
-	  <script src="{{=it.nouwiki.template}}/assets/static/js/template.ui.js"></script>
+	  <script src="{{=it.nouwiki.template}}/assets/static/js/template.ui.js" async></script>
 
 		<!-- Global User JS -->
 		{{ for(var i in it.global.js) { }}
@@ -54,5 +50,4 @@ getTemplate({
 		<script class="local_js" src="{{=it.local.js[i]}}"></script>
 		{{ } }}
 	</body>
-	</html>`
-})
+</html>

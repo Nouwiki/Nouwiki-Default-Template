@@ -1,5 +1,4 @@
-getTemplate({
-	"template": `<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -11,6 +10,7 @@ getTemplate({
     var nouwiki_global = {};
     nouwiki_global.target = "dynamic";
   </script>
+  <script src="{{=it.nouwiki.parser}}"></script>
   <script src="{{=it.nouwiki.nouwiki}}/js/require.js"></script>
   <script src="{{=it.nouwiki.nouwiki}}/js/nouwiki.init.min.js"></script>
   <script>
@@ -32,5 +32,4 @@ getTemplate({
 <body>
 
 </body>
-</html>`
-});
+</html>
